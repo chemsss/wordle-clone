@@ -1,0 +1,1 @@
+export type LetterStatus = 'idle' | 'correct' | 'wrong-position' | 'not-present' ;

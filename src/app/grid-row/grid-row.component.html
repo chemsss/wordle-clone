@@ -1,0 +1,6 @@
+<div style="display:flex; gap: 10px; justify-content: center; margin-top: 50px">
+  @for (gridCell of gridRow.rowCells; track $index) {
+    <app-grid-cell [gridCell]="gridCell" />
+  }
+  
+</div>
