@@ -1,0 +1,10 @@
+<div class="grid">
+  @for (gridRow of gridRows; track $index) {
+    @if($index == 0) {
+      <app-grid-row [active]="true" [gridRow]="gridRow" [numberOfColumns]="this.wordToGuess.length" />
+    } @else {
+      <app-grid-row [active]="false" [gridRow]="gridRow" [numberOfColumns]="this.wordToGuess.length" />
+    }
+    
+  }
+</div>

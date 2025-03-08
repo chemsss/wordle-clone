@@ -2,10 +2,10 @@ $lettersColor: white;
 
 
 .cell {
-  width: 70px;
+  width: 60px;
   height: 70px;
   border: 2px solid rgba(0, 0, 0, .6);
-  border-radius: 10px;
+  border-radius: 5px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,9 +13,14 @@ $lettersColor: white;
   font-size: 24px;
   font-weight: 400;
   color: $lettersColor;
+  background-color: #556B2F;
 
   .p {
     padding-top: 20px;
   }
 
+}
+
+.active {
+  background-color: #86aa49;
 }

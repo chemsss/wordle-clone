@@ -12,17 +12,8 @@ import { GridCellComponent } from '../grid-cell/grid-cell.component';
 })
 export class GridRowComponent {
 
-  @Input() guessedWord!: string;
-  @Input() numberOfColumns!: number;
-
-  gridRow!: GridRow;
-
-  ngOnInit() {
-    this.gridRow = new GridRow(this.numberOfColumns);
-    if(this.guessedWord) {
-      this.gridRow.setGuessedWord(this.guessedWord);
-    }
-    
-  }
+  @Input() active!: boolean;  // Currently used row or not
+  @Input() numberOfColumns!: number;  // Number of cells, should be the same for every row
+  @Input() gridRow!: GridRow; // Row object, one for every row
 
 }

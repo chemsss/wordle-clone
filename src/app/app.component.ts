@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 
 import { HeaderComponent } from './header/header.component';
+import { GridComponent } from './grid/grid.component';
 
-import { GridRowComponent } from './grid-row/grid-row.component';
 
 @Component({
   selector: 'app-root',
-  imports: [ HeaderComponent, GridRowComponent ],
+  imports: [ HeaderComponent, GridComponent ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

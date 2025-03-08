@@ -1,6 +1,5 @@
-<div style="display:flex; gap: 10px; justify-content: center; margin-top: 50px">
+<div class="grid-row">
   @for (gridCell of gridRow.rowCells; track $index) {
-    <app-grid-cell [gridCell]="gridCell" />
+    <app-grid-cell [gridCell]="gridCell" [activeRow]="active" />
   }
-  
 </div>

@@ -1,16 +1,16 @@
 import { LetterStatus } from "./letter-status";
 
 export class GridCell {
-  guessedLetter: string;
+  displayedLetter: string;
   status!: LetterStatus;
 
   constructor() {
-    this.guessedLetter = "";
+    this.displayedLetter = ".";
     this.status = "idle";
   }
 
-  setGuessedLetter(letter: string): void {
-    this.guessedLetter = letter;
+  setDisplayedLetter(letter: string): void {
+    this.displayedLetter = letter;
   }
 
   setCorrect(): void {
