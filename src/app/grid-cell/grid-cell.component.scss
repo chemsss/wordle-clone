@@ -1,5 +1,6 @@
-$lettersColor: white;
+@use 'variables' as v;
 
+$lettersColor: white;
 
 .cell {
   width: 60px;
@@ -23,4 +24,16 @@ $lettersColor: white;
 
 .active {
   background-color: #86aa49;
+}
+
+.correct {
+  background-color: #DB3A34;
+}
+
+.wrong-position {
+  background-color: orange;
+}
+
+.not-present {
+  background-color: #084C61;
 }

@@ -1,9 +1,11 @@
+import { throws } from "assert";
 import { GridCell } from "./grid-cell";
+import { LetterStatus } from "./letter-status";
 
 export class GridRow {
   displayWord: string;
   rowCells!: GridCell[];
-  status!: boolean; // false = empty, true = already used row
+  active!: boolean; // false = empty, true = row active or has been active
 
   constructor(numberOfLetters: number, displayWord?: string) {
     //create cells depending of number of letters
@@ -13,16 +15,30 @@ export class GridRow {
     // if a word is specified set guessword variable to that word, else set the variable to a string with dots
     if(displayWord) {
       this.displayWord = displayWord;
-      this.status = true;
+      this.active = true;
     } else {
       this.displayWord = "";
       for(let i=0; i < numberOfLetters; i++) this.displayWord += ".";
-      this.status = false;
+      this.active = false;
     }
 
     // Set the letters to display in the cells depending on the word
     this.setDisplayWord(this.displayWord);
     
+  }
+
+  setCellStatus(i: number, status: LetterStatus): void {
+    switch(status) {
+      case "correct": 
+        this.rowCells[i].setCorrect();
+        break;
+      case "wrong-position":
+        this.rowCells[i].setWrongPosition();
+        break;
+      case "not-present":
+        this.rowCells[i].setNotPresent();
+        break;
+    }
   }
 
   setDisplayWord(word: string): void {

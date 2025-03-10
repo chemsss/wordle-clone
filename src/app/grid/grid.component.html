@@ -1,9 +1,9 @@
 <div class="grid">
-  @for (gridRow of gridRows; track $index) {
-    @if($index == 0) {
-      <app-grid-row [active]="true" [gridRow]="gridRow" [numberOfColumns]="this.wordToGuess.length" />
+  @for (gridRow of grid.gridRows; track $index) {
+    @if(gridRow.active == true) {
+      <app-grid-row [active]="true" [gridRow]="gridRow" [numberOfColumns]="this.grid.wordToGuessLength" />
     } @else {
-      <app-grid-row [active]="false" [gridRow]="gridRow" [numberOfColumns]="this.wordToGuess.length" />
+      <app-grid-row [active]="false" [gridRow]="gridRow" [numberOfColumns]="this.grid.wordToGuessLength" />
     }
     
   }

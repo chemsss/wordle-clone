@@ -1,3 +1,8 @@
-<div [ngClass]="{cell: true, active: activeRow ? true : false}" >
+<div [ngClass]="{ 
+                  cell: true, active: activeRow ? true : false, 
+                  correct: gridCell.status=='correct' ? true : false, 
+                  'wrong-position': gridCell.status=='wrong-position' ? true : false,
+                  'not-present': gridCell.status=='not-present' ? true : false
+                }" >
   <p>{{ gridCell.displayedLetter }}</p>
 </div>

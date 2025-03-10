@@ -1,7 +1,8 @@
 import { Component, HostListener  } from '@angular/core';
 
 import { GridRowComponent } from '../grid-row/grid-row.component';
-import { GridRow } from '../models/grid-row';
+
+import { Grid } from '../models/grid';
 
 import { GridService } from '../services/grid.service';
 
@@ -15,35 +16,20 @@ export class GridComponent {
 
   constructor(private gridService: GridService) { };
 
-  wordToGuess!: string;
-  numberOfChances!: number;
-
-  guesses!: string[];
-
-  activeRow!: number;
-  activeGuess!: string;
-
-  gridRows!: GridRow[];
+  grid!: Grid;
 
   ngOnInit() {
-    this.wordToGuess = this.gridService.wordToGuess;
-    this.numberOfChances = this.gridService.numberOfChances;
-
-    this.gridRows = [];
-    for(let i=0; i < this.numberOfChances; i++) {
-      this.gridRows.push(new GridRow(this.wordToGuess.length))
-    }
-    //this.gridRows[0].setDisplayWord(this.wordToGuess);
-
+    this.grid = this.gridService.grid;
   }
 
-
-  // Listener just for one key
-  @HostListener('window:keyup', ['$event'])
+  // keyboard listener (keyup = when key is released)
+  @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {
-    // some logic here
-    //console.log(event);
-    this.gridRows = this.gridService.handleKey(this.gridRows, event.key);
+    if(this.grid.won == false && this.grid.lost == false) {
+      //console.log(event);
+      this.grid = this.gridService.handleKey(this.grid, event.key);
+    }
+    
   }
 
 
