@@ -21,8 +21,8 @@ export class Grid {
 
 
   constructor() {
-    this.wordToGuess = "ABASOURDIT";  // Temporary hard coded values
-    this.wordToGuessLength = 10;
+    this.wordToGuess = "TRANSMISSION";  // Temporary hard coded values
+    this.wordToGuessLength = this.wordToGuess.length;
     this.numberOfChances = 6;
     this.guesses = [];
     this.activeRow = 0;
