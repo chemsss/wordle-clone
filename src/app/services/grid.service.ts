@@ -42,7 +42,7 @@ export class GridService {
     key = key.toUpperCase();
     // If word contains ".", replace first "." by the typed letter, else do nothing because the word is full
     if(displayWordCopy.includes(".")) {
-      displayWordCopy = displayWordCopy.replace(".", key)
+      displayWordCopy = displayWordCopy.replace(".", key);
     }
 
     // Refresh word to display on active row
@@ -50,6 +50,7 @@ export class GridService {
 
     return grid;
   }
+  
 
   deleteLetter(grid: Grid): Grid {
     let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
@@ -58,8 +59,11 @@ export class GridService {
     if(displayWordCopy.includes(".")) {
       // Check if the word is full of dots (otherwise it will add more dots)
       if(displayWordCopy.split(".").length-1 < displayWordCopy.length) {
-        // Find index of first "." in the word, and replace the character right before it by a "."
+        // Restrict deletion of first letter if we give the first letter to the user
+        if( !(grid.giveLetter == true && displayWordCopy.indexOf(".") == grid.giveLetterIndex+1) ) {
+          // Find index of first "." in the word, and replace the character right before it by a "."
         displayWordCopy = displayWordCopy.substring(0, displayWordCopy.indexOf(".")-1) + "." + displayWordCopy.substring(displayWordCopy.indexOf(".")-1 + 1);
+        }
       }
     } else {
       // If there is no "." just replace last char by "."
@@ -71,6 +75,7 @@ export class GridService {
 
     return grid;
   }
+
 
   makeAGuess(grid: Grid): Grid {
     let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;

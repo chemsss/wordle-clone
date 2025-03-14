@@ -19,9 +19,12 @@ export class Grid {
 
   listenKeyboard!: boolean;
 
+  giveLetter!: boolean; // When this is active, we give the first letter of the word to the user, that he cannot delete
+  giveLetterIndex!: number;
+
 
   constructor() {
-    this.wordToGuess = "TRANSMISSION";  // Temporary hard coded values
+    this.wordToGuess = "EXACERBES";  // Temporary hard coded values
     this.wordToGuessLength = this.wordToGuess.length;
     this.numberOfChances = 6;
     this.guesses = [];
@@ -29,10 +32,19 @@ export class Grid {
     this.won = false;
     this.lost = false;
     this.listenKeyboard = true;
+    this.giveLetter = true;
+    this.giveLetterIndex = 0;
 
     this.gridRows = [];
     for(let i=0; i < this.numberOfChances; i++) {
-      this.gridRows.push(new GridRow(this.wordToGuessLength));
+      if(this.giveLetter) {
+        // Give first letter to user
+        this.gridRows.push( 
+          new GridRow(this.wordToGuessLength).giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndex), this.giveLetterIndex) 
+        );
+      } else {
+        this.gridRows.push(new GridRow(this.wordToGuessLength));
+      }
     }
     this.gridRows[0].active = true;
   }

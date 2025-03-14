@@ -16,4 +16,10 @@ export class GridRowComponent {
   @Input() numberOfColumns!: number;  // Number of cells, should be the same for every row
   @Input() gridRow!: GridRow; // Row object, one for every row
 
+  nonActiveGridRow!: GridRow; // We use this for non used/non active rows
+
+  ngOnInit() {
+    this.nonActiveGridRow = new GridRow(this.numberOfColumns);
+  }
+
 }

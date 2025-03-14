@@ -48,4 +48,13 @@ export class GridRow {
     }
   }
 
+  giveACorrectLetter(letter: string, index: number): GridRow {
+    // Replace the letter in displayWord by index
+    let word = this.displayWord.substring(0, index) +letter + this.displayWord.substring(index + 1);
+    // set displayWord and the rowCells and set the status of the cell of the correct letter to "correct"
+    this.setDisplayWord(word);
+    this.setCellStatus(index, "correct");
+    return this;
+  }
+
 }
