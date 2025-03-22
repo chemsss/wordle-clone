@@ -1,16 +1,19 @@
 @use 'variables' as v;
 
 header {
-  width: 100%;
+  //width: 100%;
   display: flex;
-  justify-content: center;
+  justify-content: end;
   align-items: center;
-  padding: 20px 0px;
+  padding: 20px 20px;
   border-bottom: 1px solid #6A6A6A;
   color: #FFF8DC;
   background-color: v.$header-color;
 
   h1 {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
     cursor: pointer;
     -webkit-text-stroke: 2px black;
     font-size: 3em;

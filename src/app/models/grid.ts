@@ -19,12 +19,14 @@ export class Grid {
 
   listenKeyboard!: boolean;
 
-  giveLetter!: boolean; // When this is active, we give the first letter of the word to the user, that he cannot delete
-  giveLetterIndex!: number;
+  giveLetter!: boolean; // When this is active, it means that one or more letters in the word are given by default to the user as a help
+  lockGivenLetters!: boolean; // If the user can type a different letter on top of a given letter or not
+  giveLetterIndices!: number[];
 
 
-  constructor() {
-    this.wordToGuess = "EXACERBES";  // Temporary hard coded values
+  constructor(wordToGuess: string, giveLetter: boolean, giveLetterIndices: number[]) {
+    //this.wordToGuess = "EXACERBES";  // Temporary hard coded values
+    this.wordToGuess = wordToGuess;    
     this.wordToGuessLength = this.wordToGuess.length;
     this.numberOfChances = 6;
     this.guesses = [];
@@ -32,16 +34,18 @@ export class Grid {
     this.won = false;
     this.lost = false;
     this.listenKeyboard = true;
-    this.giveLetter = true;
-    this.giveLetterIndex = 0;
+    this.giveLetter = giveLetter;
+    this.lockGivenLetters = false;
+    this.giveLetterIndices = giveLetterIndices;
 
     this.gridRows = [];
     for(let i=0; i < this.numberOfChances; i++) {
       if(this.giveLetter) {
-        // Give first letter to user
-        this.gridRows.push( 
-          new GridRow(this.wordToGuessLength).giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndex), this.giveLetterIndex) 
-        );
+        let gridRow = new GridRow(this.wordToGuessLength);
+        for(let i=0; i < giveLetterIndices.length ; i++) {
+          gridRow.giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndices[i]), this.giveLetterIndices[i])
+        }
+        this.gridRows.push(gridRow);
       } else {
         this.gridRows.push(new GridRow(this.wordToGuessLength));
       }
