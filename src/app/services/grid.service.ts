@@ -4,7 +4,7 @@ import { Grid } from '../models/grid';
 
 import { UtilsService } from './utils.service';
 
-const acceptedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+const acceptedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'";
 
 @Injectable({
   providedIn: 'root'
@@ -18,9 +18,10 @@ export class GridService {
 
   constructor(private utilsService: UtilsService) {
     const wordOfTheDay = utilsService.getWordOfTheDay()
-    console.log(wordOfTheDay);
+    //console.log(wordOfTheDay);
     let giveLetters = utilsService.getApostrophesAndHyphensIndices(wordOfTheDay);
     giveLetters.push(0);
+    //giveLetters.push(3);
     this.grid = new Grid(wordOfTheDay, true, giveLetters);
   }
 
@@ -63,14 +64,16 @@ export class GridService {
   deleteLetter(grid: Grid): Grid {
     let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
 
-    // If we give no letters to the user (so there are no locked letters)
+    // If we give no letters to the user or if we give letters to the user but we don't lock them
     if(grid.giveLetter == false || (grid.giveLetter == true && grid.lockGivenLetters == false)) {
       // If word is not full
       if(displayWordCopy.includes(".")) {
+
+        // TODO : add a check if all letters in the word are given letters | or, replace indexOf(".") by a function that gives index of furthest letter that is not a dot ?
+
         // Check if the word is full of dots (otherwise it will add more dots)
         if(displayWordCopy.split(".").length-1 < displayWordCopy.length) {
-          // Check if there are locked letters
-          displayWordCopy = displayWordCopy.substring(0, displayWordCopy.indexOf(".")-1) + "." + displayWordCopy.substring(displayWordCopy.indexOf(".")-1 + 1);
+          displayWordCopy = displayWordCopy.substring(0, this.getLastLetterIndex(displayWordCopy)) + "." + displayWordCopy.substring(this.getLastLetterIndex(displayWordCopy) + 1);
         }
       } else {
         // If there is no "." just replace last char by "."
@@ -79,10 +82,28 @@ export class GridService {
     } else {
       displayWordCopy = this.checkLockedLettersAndDeleteLetter(grid);
     }
+    //console.log(displayWordCopy);
     // Refresh word to display on active row
     grid.gridRows[this.grid.activeRow].setDisplayWord(displayWordCopy);
 
     return grid;
+  }
+
+
+  // Get index of last letter that is not a dot
+  getLastLetterIndex(word: string): number {
+    if(word.split(".").length-1 < word.length) {
+      let letterIndices = [];
+      for(let i=0 ; i < word.length ; i++) {
+        if(word.charAt(i) != ".") {
+          letterIndices.push(i);
+        }
+      }
+      return Math.max(...letterIndices);
+    } else {
+      console.log("Problem in getting the index of last non-dot letter : word full of dots");
+      return 0;
+    }
   }
 
 
@@ -95,7 +116,7 @@ export class GridService {
       if( (displayWordCopy.split(".").length-1) < (displayWordCopy.length-grid.giveLetterIndices.length) ) {
         // If there is a locked letter right before the first dot in user's current guess
         if(grid.giveLetterIndices.includes(displayWordCopy.indexOf(".")-1)) {
-          // replace the letter right before the locked letter by a dot
+          // replace the letter right before the locked letter by a dot TODO : replace by search index of none-locked letter before it
           displayWordCopy = displayWordCopy.substring(0, displayWordCopy.indexOf(".")-2) + "." + displayWordCopy.substring(displayWordCopy.indexOf(".")-1);
         } else {
           // Otherwise, just replace the letter before the first dot by a dot
@@ -220,13 +241,14 @@ export class GridService {
   wonGame(grid: Grid): Grid {
     grid.won = true;
     grid.listenKeyboard = false;
-    alert("Félicitations ! Vous avez trouvé le mot ! BJ BG");
+    alert("Félicitations ! Vous avez trouvé le mot !");
     return grid;
   }
 
   lostGame(grid: Grid): Grid {
     grid.lost = true;
     grid.listenKeyboard = false;
+    alert("Vous avez perdu ! Le mot était : " +grid.wordToGuess +".\n\nBien essayé, retentez demain !");
     return grid;
   }
   

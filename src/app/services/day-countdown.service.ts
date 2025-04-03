@@ -18,12 +18,11 @@ export class DayCountdownService {
     let minutes = (59 - today.getMinutes()).toString().padStart(2, '0');
     let seconds = (59 - today.getSeconds()).toString().padStart(2, '0');
 
-    console.log(hours, minutes, seconds);
     this.dayCountdown = new DayCountdown(hours, minutes, seconds);
   }
 
   refreshCountdown(): DayCountdown {
-    const startTime = performance.now()
+    //const startTime = performance.now()
     const now = new Date();
     const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0, 0);  //next day midnight
 
@@ -34,7 +33,7 @@ export class DayCountdownService {
     this.dayCountdown.minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
     this.dayCountdown.seconds = (totalSeconds % 60).toString().padStart(2, '0');
     
-    const endTime = performance.now()
+    //const endTime = performance.now()
     //console.log(`refreshCountdown took ${endTime - startTime} milliseconds`)
     return this.dayCountdown;
   }

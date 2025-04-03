@@ -25,7 +25,6 @@ export class Grid {
 
 
   constructor(wordToGuess: string, giveLetter: boolean, giveLetterIndices: number[]) {
-    //this.wordToGuess = "EXACERBES";  // Temporary hard coded values
     this.wordToGuess = wordToGuess;    
     this.wordToGuessLength = this.wordToGuess.length;
     this.numberOfChances = 6;
@@ -35,12 +34,12 @@ export class Grid {
     this.lost = false;
     this.listenKeyboard = true;
     this.giveLetter = giveLetter;
-    this.lockGivenLetters = false;
+    this.lockGivenLetters = true;
     this.giveLetterIndices = giveLetterIndices;
 
     this.gridRows = [];
     for(let i=0; i < this.numberOfChances; i++) {
-      if(this.giveLetter) {
+      if(this.giveLetter && i==0) { // For now, give first letter of the word only on the first row
         let gridRow = new GridRow(this.wordToGuessLength);
         for(let i=0; i < giveLetterIndices.length ; i++) {
           gridRow.giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndices[i]), this.giveLetterIndices[i])
