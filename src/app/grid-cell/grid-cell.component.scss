@@ -24,16 +24,58 @@ $lettersColor: white;
 
 .active {
   background-color: #86aa49;
+  animation: bounce 0.2s ease-in-out forwards;
 }
 
 .correct {
   background-color: #DB3A34;
+  animation: flip 0.5s ease forwards;
 }
 
 .wrong-position {
   background-color: orange;
+  animation: flip 0.5s ease forwards;
 }
 
 .not-present {
   background-color: #084C61;
+  animation: flip 0.6s ease forwards;
 }
+
+
+/* keyframe animations */
+@keyframes flip {
+  0% {
+    transform: rotateX(0);
+    border-color: #333;
+  }
+  45% {
+    transform: rotateX(90deg);
+    border-color: #333;
+  }
+  55% {
+    transform: rotateX(90deg);
+    border-color: var(--border-color);
+  }
+  100% {
+    transform: rotateX(0deg);
+    border-color: var(--border-color);
+    color: #eee;
+  }
+}
+
+
+@keyframes bounce {
+  0% { 
+    transform: scale(1);
+    border-color: #ddd;
+  }
+  50% { 
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    border-color: #333;
+  }
+}
+
