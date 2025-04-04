@@ -8,6 +8,16 @@ p {
   text-align: right;
 
   .countdown {
-    margin-top: 5px;
+    @media(min-width: 601px) {
+      margin-top: 5px;      
+    }
+    @media(max-width: 600px) {
+      margin-left: 5px;
+    }
   }
+
+  @media(max-width: 600px) {
+    flex-direction: row;
+  }
+
 }

@@ -241,7 +241,7 @@ export class GridService {
   wonGame(grid: Grid): Grid {
     grid.won = true;
     grid.listenKeyboard = false;
-    alert("Félicitations ! Vous avez trouvé le mot !");
+    alert("Félicitations ! Vous avez trouvé le mot du jour !\n\nRevenez demain pour le prochain mot !");
     return grid;
   }
 
