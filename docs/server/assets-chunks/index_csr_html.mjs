@@ -3,7 +3,7 @@ export default `<!doctype html>
 <head>
   <meta charset="utf-8">
   <title>WordleClone</title>
-  <base href="/">
+  <base href="./">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="icon" type="image/x-icon" href="favicon.ico">
 <style>body{margin:0;background-color:#2f4f4f}</style><link rel="stylesheet" href="styles-LE3R4QXI.css" media="print" onload="this.media='all'"><noscript><link rel="stylesheet" href="styles-LE3R4QXI.css"></noscript></head>
