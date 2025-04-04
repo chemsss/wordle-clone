@@ -39,7 +39,7 @@ export class Grid {
 
     this.gridRows = [];
     for(let i=0; i < this.numberOfChances; i++) {
-      if(this.giveLetter && i==0) { // For now, give first letter of the word only on the first row
+      if(this.giveLetter) {
         let gridRow = new GridRow(this.wordToGuessLength);
         for(let i=0; i < giveLetterIndices.length ; i++) {
           gridRow.giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndices[i]), this.giveLetterIndices[i])
