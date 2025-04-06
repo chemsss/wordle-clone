@@ -1,7 +1,28 @@
 /* You can add global styles to this file, and also import other style files */
 @use 'variables' as v;
+@use '@angular/material' as mat;
 
 body {
   margin: 0;
   background-color: v.$primary-color;
 }
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+
+
+// Help modal
+:root {
+  @include mat.dialog-overrides((
+    container-shape: rectangle,
+    container-color: v.$header-color,
+    subhead-color: v.$text-color,
+    supporting-text-color: v.$text-color,
+  ));
+}
+
+//.mat-mdc-dialog-surface {
+//  border: 3px solid v.$header-color;
+//  border-radius: 0px !important;
+//}

@@ -1,8 +1,10 @@
 <div [ngClass]="{ 
-                  cell: true, active: activeRow ? true : false, 
+                  cell: true, 
+                  active: activeRow ? true : false, 
                   correct: gridCell.status=='correct' ? true : false, 
                   'wrong-position': gridCell.status=='wrong-position' ? true : false,
-                  'not-present': gridCell.status=='not-present' ? true : false
+                  'not-present': gridCell.status=='not-present' ? true : false,
+                  example: gridCell.example ? true : false
                 }" >
   <p>{{ gridCell.displayedLetter }}</p>
 </div>

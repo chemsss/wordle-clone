@@ -1,0 +1,38 @@
+@use 'variables' as v;
+
+div {
+  color: v.$text-color;
+}
+
+.header {
+  width: 100%;
+  display: flex;
+  justify-content: end;
+}
+
+h1 {
+  margin-top: 0;
+}
+
+.title {
+  border-bottom: 2px solid white;
+}
+
+.content {
+  display: flex;
+  gap: 10px;
+  margin: 0px 20px 20px 20px;
+  padding: 0 10px 0 15px;
+  align-items: center;
+}
+
+.close {
+  color: v.$text-color !important;
+}
+
+//.dialog-content {
+//  background-color: v.$header-color !important;
+//  color: white !important;
+//}
+
+

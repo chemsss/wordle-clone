@@ -4,11 +4,13 @@ export class GridCell {
   displayedLetter: string;
   status!: LetterStatus;
   filled!: boolean;
+  example!: boolean;
 
   constructor() {
     this.displayedLetter = ".";
     this.status = "idle";
     this.filled = false;
+    this.example = false;
   }
 
   setDisplayedLetter(letter: string): void {
@@ -27,6 +29,9 @@ export class GridCell {
   }
   setNotPresent(): void {
     this.status = "not-present";
+  }
+  setExample(): void {
+    this.example = true;
   }
 
 

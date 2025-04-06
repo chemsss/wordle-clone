@@ -28,6 +28,12 @@ $lettersColor: white;
 
 }
 
+.example {
+  width: 30px;
+  height: 40px;
+  font-size: 18px;
+}
+
 .active {
   background-color: #86aa49;
   animation: bounce 0.2s ease-in-out forwards;
