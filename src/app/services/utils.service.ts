@@ -70,6 +70,47 @@ export class UtilsService {
     }
     return indices;
   }
+
+  replaceAt(string: string, index: number, replacement: string): string {
+    if(index >= 0) {
+      if(index == 0) {
+        return replacement + string.substring(index + replacement.length);
+      } else {
+        return string.substring(0, index) + replacement + string.substring(index + replacement.length);
+      }
+    } else {
+      return string;
+    }
+    
+  }
+
+  findNextNonLockedLetter(activeColumn: number, wordLength: number, lockedLetters: number[]): number {
+    let indices = [];
+    for(let i=activeColumn; i < wordLength; i++) {
+      if(!lockedLetters.includes(i)) {
+        indices.push(i);
+      }
+    }
+    if(indices.length == 0) {
+      return -1
+    } else {
+      return Math.min(...indices);
+    }
+  }
+
+  findPreviousNonLockedLetter(activeColumn: number, wordLength: number, lockedLetters: number[]): number {
+    let indices = [];
+    for(let i=0; i < activeColumn; i++) {
+      if(!lockedLetters.includes(i)) {
+        indices.push(i);
+      }
+    }
+    if(indices.length == 0) {
+      return -1
+    } else {
+      return Math.max(...indices);
+    }
+  }
   
   
 }

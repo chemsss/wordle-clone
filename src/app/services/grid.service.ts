@@ -17,12 +17,11 @@ export class GridService {
   //constructor() { };
 
   constructor(private utilsService: UtilsService) {
-    const wordOfTheDay = utilsService.getWordOfTheDay()
+    const wordOfTheDay = utilsService.getWordOfTheDay();
     //console.log(wordOfTheDay);
     let giveLetters = utilsService.getApostrophesAndHyphensIndices(wordOfTheDay);
     giveLetters.push(0);
-    //giveLetters.push(3);
-    this.grid = new Grid(wordOfTheDay, true, giveLetters);
+    this.grid = new Grid(wordOfTheDay, true, giveLetters, true);
   }
 
   handleKey(grid: Grid, key:string): Grid {
@@ -45,13 +44,23 @@ export class GridService {
 
 
   typeLetter(grid: Grid, key: string): Grid {
-    let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
+    let displayWordCopy = grid.gridRows[grid.activeRow].displayWord;
 
     // only typing in uppercase
     key = key.toUpperCase();
-    // If word contains ".", replace first "." by the typed letter, else do nothing because the word is full
-    if(displayWordCopy.includes(".")) {
-      displayWordCopy = displayWordCopy.replace(".", key);
+
+    if(grid.activeColumn < grid.wordToGuessLength) {
+
+      if(grid.lockGivenLetters == false || ( grid.giveLetter == true && !grid.giveLetterIndices.includes(grid.activeColumn) ))  {
+        displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key);
+        grid.incrementActiveColumn();
+      } else {
+        if(this.utilsService.findNextNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices) != -1) {
+          grid.setActiveColumn(this.utilsService.findNextNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices));
+          displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key);
+          grid.incrementActiveColumn();
+        }
+      }
     }
 
     // Refresh word to display on active row
@@ -64,77 +73,27 @@ export class GridService {
   deleteLetter(grid: Grid): Grid {
     let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
 
-    // If we give no letters to the user or if we give letters to the user but we don't lock them
-    if(grid.giveLetter == false || (grid.giveLetter == true && grid.lockGivenLetters == false)) {
-      // If word is not full
-      if(displayWordCopy.includes(".")) {
-
-        // TODO : add a check if all letters in the word are given letters | or, replace indexOf(".") by a function that gives index of furthest letter that is not a dot ?
-
-        // Check if the word is full of dots (otherwise it will add more dots)
-        if(displayWordCopy.split(".").length-1 < displayWordCopy.length) {
-          displayWordCopy = displayWordCopy.substring(0, this.getLastLetterIndex(displayWordCopy)) + "." + displayWordCopy.substring(this.getLastLetterIndex(displayWordCopy) + 1);
+    if(grid.activeColumn >= 0) {
+      if(grid.lockGivenLetters == false || ( grid.giveLetter == true && !grid.giveLetterIndices.includes(grid.activeColumn-1) )) {
+        displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, ".");
+        if(grid.activeColumn > 0) {
+          grid.decrementActiveColumn();
         }
       } else {
-        // If there is no "." just replace last char by "."
-        displayWordCopy = displayWordCopy.substring(0, displayWordCopy.length-1) + ".";  
+        if(this.utilsService.findPreviousNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices) != -1) {
+          grid.setActiveColumn(this.utilsService.findPreviousNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices) + 1);
+          displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, ".");
+          if(grid.activeColumn > 0) {
+            grid.decrementActiveColumn();
+          }
+        }
       }
-    } else {
-      displayWordCopy = this.checkLockedLettersAndDeleteLetter(grid);
     }
-    //console.log(displayWordCopy);
-    // Refresh word to display on active row
     grid.gridRows[this.grid.activeRow].setDisplayWord(displayWordCopy);
 
     return grid;
   }
 
-
-  // Get index of last letter that is not a dot
-  getLastLetterIndex(word: string): number {
-    if(word.split(".").length-1 < word.length) {
-      let letterIndices = [];
-      for(let i=0 ; i < word.length ; i++) {
-        if(word.charAt(i) != ".") {
-          letterIndices.push(i);
-        }
-      }
-      return Math.max(...letterIndices);
-    } else {
-      console.log("Problem in getting the index of last non-dot letter : word full of dots");
-      return 0;
-    }
-  }
-
-
-  checkLockedLettersAndDeleteLetter(grid: Grid): string {
-    let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
-
-    // If word is not full
-    if(displayWordCopy.includes(".")) {
-      // If there are less dots than writable letters (writable letters = number of letters - locked letters), so basically if all writable letters are not dots
-      if( (displayWordCopy.split(".").length-1) < (displayWordCopy.length-grid.giveLetterIndices.length) ) {
-        // If there is a locked letter right before the first dot in user's current guess
-        if(grid.giveLetterIndices.includes(displayWordCopy.indexOf(".")-1)) {
-          // replace the letter right before the locked letter by a dot TODO : replace by search index of none-locked letter before it
-          displayWordCopy = displayWordCopy.substring(0, displayWordCopy.indexOf(".")-2) + "." + displayWordCopy.substring(displayWordCopy.indexOf(".")-1);
-        } else {
-          // Otherwise, just replace the letter before the first dot by a dot
-          displayWordCopy = displayWordCopy.substring(0, displayWordCopy.indexOf(".")-1) + "." + displayWordCopy.substring(displayWordCopy.indexOf(".")-1 + 1);
-        }
-      }
-    } else {
-      // If there are no dots (so the word is full), just check if the last letter of the word is a locked letter
-      if(grid.giveLetterIndices.includes(grid.wordToGuessLength-1)) {
-        displayWordCopy = displayWordCopy.substring(0, displayWordCopy.length-2) + "." + displayWordCopy[grid.wordToGuess.length -1];
-      } else {
-        // If it is not, just replace last letter by a dot
-        displayWordCopy = displayWordCopy.substring(0, displayWordCopy.length-1) + ".";  
-      }
-    }
-
-    return displayWordCopy;
-  }
 
 
   makeAGuess(grid: Grid): Grid {
@@ -232,6 +191,7 @@ export class GridService {
     if(grid.activeRow < grid.numberOfChances-1) {
       // Increment active row and set the row to used
       grid.incrementActiveRow();
+      grid.setActiveColumn(0);
     } else {
       grid = this.lostGame(grid);
     }

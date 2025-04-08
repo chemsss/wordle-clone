@@ -54,6 +54,49 @@ $lettersColor: white;
   animation: flip 0.6s ease forwards;
 }
 
+.filled {
+  //animation: appear 0.1s ease-in-out reverse;
+  animation-name: appear;
+  animation-duration: 0.15s;
+  animation-direction: reverse;
+}
+
+.empty {
+  animation-name: appear2;
+  animation-duration: 0.05s;
+  animation-direction: alternate;
+}
+
+/* keyframe animations */
+@keyframes appear {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(0.7);
+  }
+  55% {
+    transform: scale(0.4);
+  }
+  100% {
+    transform: scale(0.1);
+    color: #eee;
+  }
+}
+
+/* keyframe animations */
+@keyframes appear2 {
+  0% {
+    transform: scale(1.75);
+  }
+  55% {
+    transform: scale(1.5);
+  }
+  100% {
+    transform: scale(1);
+    color: #eee;
+  }
+}
 
 /* keyframe animations */
 @keyframes flip {

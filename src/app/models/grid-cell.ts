@@ -14,6 +14,11 @@ export class GridCell {
   }
 
   setDisplayedLetter(letter: string): void {
+    if(letter == ".") {
+      this.filled = false;
+    } else {
+      this.filled = true;
+    }
     this.displayedLetter = letter;
   }
 

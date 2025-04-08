@@ -12,6 +12,8 @@ export class Grid {
   guesses!: string[];
 
   activeRow!: number;
+  activeColumn!: number;
+
   activeGuess!: string;
 
   won!: boolean;
@@ -24,26 +26,34 @@ export class Grid {
   giveLetterIndices!: number[];
 
 
-  constructor(wordToGuess: string, giveLetter: boolean, giveLetterIndices: number[]) {
+  constructor(wordToGuess: string, giveLetter: boolean, giveLetterIndices: number[], lockGivenLetters: boolean) {
     this.wordToGuess = wordToGuess;    
     this.wordToGuessLength = this.wordToGuess.length;
     this.numberOfChances = 6;
     this.guesses = [];
     this.activeRow = 0;
+    this.activeColumn = 0;
     this.won = false;
     this.lost = false;
     this.listenKeyboard = true;
     this.giveLetter = giveLetter;
-    this.lockGivenLetters = true;
+    this.lockGivenLetters = lockGivenLetters;
     this.giveLetterIndices = giveLetterIndices;
+
+    if(giveLetterIndices.includes(0)) {
+      //this.activeColumn = 1;
+    }
 
     this.gridRows = [];
     for(let i=0; i < this.numberOfChances; i++) {
       if(this.giveLetter) {
         let gridRow = new GridRow(this.wordToGuessLength);
-        for(let i=0; i < giveLetterIndices.length ; i++) {
-          gridRow.giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndices[i]), this.giveLetterIndices[i])
-        }
+        // Maybe add a possibility to give a letter without it being red
+        //if(this.lockGivenLetters == false && i == 0)  {
+          for(let j=0; j < giveLetterIndices.length ; j++) {
+            gridRow.giveACorrectLetter(this.wordToGuess.charAt(this.giveLetterIndices[j]), this.giveLetterIndices[j]);
+          }
+        //}
         this.gridRows.push(gridRow);
       } else {
         this.gridRows.push(new GridRow(this.wordToGuessLength));
@@ -65,6 +75,18 @@ export class Grid {
   incrementActiveRow(): void {
     this.gridRows[this.activeRow+1].active = true;
     this.activeRow++;
+  }
+
+  incrementActiveColumn(): void {
+    this.activeColumn++;
+  }
+
+  decrementActiveColumn(): void {
+    this.activeColumn--;
+  }
+
+  setActiveColumn(index: number): void {
+    this.activeColumn = index;
   }
 
   setNumberOfChances(number: number): void {
