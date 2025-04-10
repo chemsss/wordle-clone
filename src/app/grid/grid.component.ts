@@ -20,6 +20,8 @@ export class GridComponent {
 
   ngOnInit() {
     this.grid = this.gridService.grid;
+    console.log("Today's word length: ", this.grid.wordToGuessLength);
+    console.log("Today's word : ", this.grid.wordToGuess);
   }
 
   // keyboard listener (keyup = when key is released)

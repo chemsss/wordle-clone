@@ -10,8 +10,6 @@ export class DayCountdownService {
   
   dayCountdown!: DayCountdown;
 
-
-
   constructor() {
     let today = new Date();
     let hours = (23 - today.getHours()).toString().padStart(2, '0');
@@ -22,7 +20,7 @@ export class DayCountdownService {
   }
 
   refreshCountdown(): DayCountdown {
-    //const startTime = performance.now()
+    // TODO : add in session storage day on which user connected, and check if day is different (when user connects at 11:55PM and is still here at 00:05AM, countdown should stay at 00:00 and not reset till user refreshes the page)
     const now = new Date();
     const midnight = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 24, 0, 0);  //next day midnight
 
@@ -33,8 +31,6 @@ export class DayCountdownService {
     this.dayCountdown.minutes = Math.floor((totalSeconds % 3600) / 60).toString().padStart(2, '0');
     this.dayCountdown.seconds = (totalSeconds % 60).toString().padStart(2, '0');
     
-    //const endTime = performance.now()
-    //console.log(`refreshCountdown took ${endTime - startTime} milliseconds`)
     return this.dayCountdown;
   }
   

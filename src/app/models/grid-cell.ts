@@ -35,6 +35,7 @@ export class GridCell {
   setNotPresent(): void {
     this.status = "not-present";
   }
+  
   setExample(): void {
     this.example = true;
   }

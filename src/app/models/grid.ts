@@ -29,6 +29,7 @@ export class Grid {
   constructor(wordToGuess: string, giveLetter: boolean, giveLetterIndices: number[], lockGivenLetters: boolean) {
     this.wordToGuess = wordToGuess;    
     this.wordToGuessLength = this.wordToGuess.length;
+    console.log(this.wordToGuessLength);
     this.numberOfChances = 6;
     this.guesses = [];
     this.activeRow = 0;

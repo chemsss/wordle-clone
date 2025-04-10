@@ -22,6 +22,9 @@ export class GridService {
     let giveLetters = utilsService.getApostrophesAndHyphensIndices(wordOfTheDay);
     giveLetters.push(0);
     this.grid = new Grid(wordOfTheDay, true, giveLetters, true);
+    if(this.utilsService.checkIfGameSaved(new Date())) {
+      this.grid = this.utilsService.loadTodaysGame(this.grid);
+    }
   }
 
   handleKey(grid: Grid, key:string): Grid {
@@ -201,14 +204,18 @@ export class GridService {
   wonGame(grid: Grid): Grid {
     grid.won = true;
     grid.listenKeyboard = false;
+    // Open Here You Won Modal
     alert("Félicitations ! Vous avez trouvé le mot du jour !\n\nRevenez demain pour le prochain mot !");
+    this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, true);
     return grid;
   }
 
   lostGame(grid: Grid): Grid {
     grid.lost = true;
     grid.listenKeyboard = false;
+    // Open Here You Lost Modal
     alert("Vous avez perdu ! Le mot était : " +grid.wordToGuess +".\n\nBien essayé, retentez demain !");
+    this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, false);
     return grid;
   }
   

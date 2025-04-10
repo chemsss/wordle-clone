@@ -1,6 +1,9 @@
-import { Injectable } from '@angular/core';
+import {isPlatformBrowser } from '@angular/common';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 
 import { wordsDb } from '../../../db/db';
+import { Grid } from '../models/grid';
+import { GridRow } from '../models/grid-row';
 
 const acceptedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
@@ -9,9 +12,12 @@ const acceptedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 })
 
 export class UtilsService {
+  private platformId!: Object;
   
-  constructor() {
-    
+  constructor(
+    @Inject(PLATFORM_ID) platformId: Object,
+  ) {
+    this.platformId = platformId;
   }
 
 
@@ -110,6 +116,101 @@ export class UtilsService {
     } else {
       return Math.max(...indices);
     }
+  }
+
+
+  // Only called when game is finished (user found the word (won) or max number of tries reached (lost))
+  saveGame(wordToGuess: string, rows: GridRow[], won: boolean): void {
+    console.log(rows, won);
+    let date = new Date();
+    const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    let save = {
+      won: won,
+      rows: [ [ { } ] ],
+      word: wordToGuess
+    }
+    for(let i=0 ; i < rows.length ; i++) {
+      let cells = [];
+      for(let j=0 ; j < rows[i].rowCells.length ; j++) {
+        cells.push({
+          letter: rows[i].rowCells[j].displayedLetter,
+          status: rows[i].rowCells[j].status
+        });
+      }
+      save.rows.push(cells);
+    }
+    save.rows.shift();
+    let userHistory = JSON.parse(localStorage.getItem('userHistory') || '{}');
+    userHistory[day] = save;
+    localStorage.setItem("userHistory", JSON.stringify(userHistory));
+  }
+
+
+  checkIfGameSaved(date: Date): boolean {
+    const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+
+    if (isPlatformBrowser(this.platformId)) {
+      let userHistory = JSON.parse(localStorage.getItem('userHistory') || '{}');
+      if(userHistory[day]) {
+        return true;
+      } else {
+        return false;
+      }
+    } else {
+      return false;
+    }
+  }
+
+
+  loadTodaysGame(grid: Grid): Grid {
+    console.log(grid);
+    let date = new Date();
+    const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+    let userHistory = JSON.parse(localStorage.getItem('userHistory') || '{}');
+    userHistory = userHistory[day];
+    console.log(userHistory);
+    for(let i=0 ; i < userHistory.rows.length ; i++) {
+      if(grid.gridRows[i]) {
+        let rowWord = "";
+        for(let j=0 ; j < userHistory.rows[i].length ; j++) {
+          console.log(i, j, userHistory.rows[i][j].letter, userHistory.rows[i][j].status)
+          /*grid.gridRows[i].rowCells[j].setDisplayedLetter(userHistory.rows[i][j].letter);
+          switch(userHistory.rows[i][j].status) {
+            case "correct":
+              grid.gridRows[i].rowCells[j].setCorrect();
+              break;
+            case "wrong-position":
+              grid.gridRows[i].rowCells[j].setWrongPosition();
+              break;
+            case "not-present":
+              grid.gridRows[i].rowCells[j].setNotPresent();
+              break;
+          }*/
+          grid.gridRows[i].setCellStatus(j, userHistory.rows[i][j].status);
+          rowWord += userHistory.rows[i][j].letter;
+
+        }
+        grid.gridRows[i].setDisplayWord(rowWord);
+        if(!rowWord.includes(".")) {
+          grid.gridRows[i].active = true;
+        }
+      }
+    }
+    if(userHistory.won == true) {
+      grid.won = true;
+      grid.listenKeyboard = false;
+      // Open Here You Won Modal
+    } else {
+      console.log("dzadkajdzk")
+      grid.lost = true;
+      grid.listenKeyboard = false;
+      // Open Here You Lost Modal
+    }
+     
+    console.log(grid);
+
+    return grid;
   }
   
   
