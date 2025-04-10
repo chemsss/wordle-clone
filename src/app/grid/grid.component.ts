@@ -1,4 +1,4 @@
-import { Component, HostListener  } from '@angular/core';
+import { Component, HostListener, ChangeDetectorRef   } from '@angular/core';
 
 import { GridRowComponent } from '../grid-row/grid-row.component';
 
@@ -14,12 +14,15 @@ import { GridService } from '../services/grid.service';
 })
 export class GridComponent {
 
-  constructor(private gridService: GridService) { };
-
+  constructor(private gridService: GridService,
+              private cdRef: ChangeDetectorRef
+    ) { };
+  
   grid!: Grid;
 
   ngOnInit() {
     this.grid = this.gridService.grid;
+    this.cdRef.detectChanges();
     console.log("Today's word length: ", this.grid.wordToGuessLength);
     console.log("Today's word : ", this.grid.wordToGuess);
   }

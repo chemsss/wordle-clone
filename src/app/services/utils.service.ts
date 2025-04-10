@@ -39,8 +39,7 @@ export class UtilsService {
 
   getAWordDependingOnDay(date: Date): string {
     // Get today's date as YYYY-MM-DD string
-    const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    //console.log(day);
+    let day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     
     // Convert the date string to a hash value
     // FNV-1a hash for better randomness
@@ -121,7 +120,6 @@ export class UtilsService {
 
   // Only called when game is finished (user found the word (won) or max number of tries reached (lost))
   saveGame(wordToGuess: string, rows: GridRow[], won: boolean): void {
-    console.log(rows, won);
     let date = new Date();
     const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
@@ -164,29 +162,14 @@ export class UtilsService {
 
 
   loadTodaysGame(grid: Grid): Grid {
-    console.log(grid);
     let date = new Date();
     const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     let userHistory = JSON.parse(localStorage.getItem('userHistory') || '{}');
     userHistory = userHistory[day];
-    console.log(userHistory);
     for(let i=0 ; i < userHistory.rows.length ; i++) {
       if(grid.gridRows[i]) {
         let rowWord = "";
         for(let j=0 ; j < userHistory.rows[i].length ; j++) {
-          console.log(i, j, userHistory.rows[i][j].letter, userHistory.rows[i][j].status)
-          /*grid.gridRows[i].rowCells[j].setDisplayedLetter(userHistory.rows[i][j].letter);
-          switch(userHistory.rows[i][j].status) {
-            case "correct":
-              grid.gridRows[i].rowCells[j].setCorrect();
-              break;
-            case "wrong-position":
-              grid.gridRows[i].rowCells[j].setWrongPosition();
-              break;
-            case "not-present":
-              grid.gridRows[i].rowCells[j].setNotPresent();
-              break;
-          }*/
           grid.gridRows[i].setCellStatus(j, userHistory.rows[i][j].status);
           rowWord += userHistory.rows[i][j].letter;
 
@@ -202,14 +185,11 @@ export class UtilsService {
       grid.listenKeyboard = false;
       // Open Here You Won Modal
     } else {
-      console.log("dzadkajdzk")
       grid.lost = true;
       grid.listenKeyboard = false;
       // Open Here You Lost Modal
     }
      
-    console.log(grid);
-
     return grid;
   }
   
