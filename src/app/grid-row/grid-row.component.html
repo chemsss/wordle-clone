@@ -1,12 +1,5 @@
 <div class="grid-row">
-  @if(active == true) {
-    @for (gridCell of gridRow.rowCells; track $index) {
-      <app-grid-cell [gridCell]="gridCell" [activeRow]="active" />
-    }
-  } @else {
-    @for (gridCell of nonActiveGridRow.rowCells; track $index) {
-      <app-grid-cell [gridCell]="gridCell" [activeRow]="active" />
-    }
+  @for (gridCell of gridRow.rowCells; track $index) {
+    <app-grid-cell [gridCell]="gridCell" [activeRow]="active" />
   }
-  
 </div>

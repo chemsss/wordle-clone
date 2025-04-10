@@ -40,12 +40,6 @@ export class UtilsService {
   getAWordDependingOnDay(date: Date): string {
     // Get today's date as YYYY-MM-DD string
     let day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-
-    let testDate = new Date();
-    if(testDate.getMinutes() > 10) {
-      day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()+9).padStart(2, '0')}`;
-    }
-    console.log(day);
     
     // Convert the date string to a hash value
     // FNV-1a hash for better randomness

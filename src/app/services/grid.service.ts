@@ -17,14 +17,20 @@ export class GridService {
   //constructor() { };
 
   constructor(private utilsService: UtilsService) {
-    const wordOfTheDay = utilsService.getWordOfTheDay();
-    //console.log(wordOfTheDay);
-    let giveLetters = utilsService.getApostrophesAndHyphensIndices(wordOfTheDay);
-    giveLetters.push(0);
-    this.grid = new Grid(wordOfTheDay, true, giveLetters, true);
-    if(this.utilsService.checkIfGameSaved(new Date())) {
-      this.grid = this.utilsService.loadTodaysGame(this.grid);
+    try {
+      const wordOfTheDay = utilsService.getWordOfTheDay();
+      //console.log(wordOfTheDay);
+      let giveLetters = utilsService.getApostrophesAndHyphensIndices(wordOfTheDay);
+      giveLetters.push(0);
+      this.grid = new Grid(wordOfTheDay, true, giveLetters, true);
+      if(this.utilsService.checkIfGameSaved(new Date())) {
+        this.grid = this.utilsService.loadTodaysGame(this.grid);
+      }
+    } catch(err) {
+      console.log(err);
+      alert("Une erreur est survenue.");
     }
+    
   }
 
   handleKey(grid: Grid, key:string): Grid {
