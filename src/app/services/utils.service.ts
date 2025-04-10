@@ -162,35 +162,43 @@ export class UtilsService {
 
 
   loadTodaysGame(grid: Grid): Grid {
-    let date = new Date();
-    const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    let userHistory = JSON.parse(localStorage.getItem('userHistory') || '{}');
-    userHistory = userHistory[day];
-    for(let i=0 ; i < userHistory.rows.length ; i++) {
-      if(grid.gridRows[i]) {
-        let rowWord = "";
-        for(let j=0 ; j < userHistory.rows[i].length ; j++) {
-          grid.gridRows[i].setCellStatus(j, userHistory.rows[i][j].status);
-          rowWord += userHistory.rows[i][j].letter;
-
+    try {
+      let date = new Date();
+      const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+      let userHistory = JSON.parse(localStorage.getItem('userHistory') || '{}');
+      userHistory = userHistory[day];
+      // If the word in the history is the same as today's word (useful when I change some code and today's word changes)
+      if(userHistory.word == grid.wordToGuess) {
+        for(let i=0 ; i < userHistory.rows.length ; i++) {
+          if(grid.gridRows[i]) {
+            let rowWord = "";
+            for(let j=0 ; j < userHistory.rows[i].length ; j++) {
+              grid.gridRows[i].setCellStatus(j, userHistory.rows[i][j].status);
+              rowWord += userHistory.rows[i][j].letter;
+    
+            }
+            grid.gridRows[i].setDisplayWord(rowWord);
+            if(!rowWord.includes(".")) {
+              grid.gridRows[i].active = true;
+            }
+          }
         }
-        grid.gridRows[i].setDisplayWord(rowWord);
-        if(!rowWord.includes(".")) {
-          grid.gridRows[i].active = true;
+        if(userHistory.won == true) {
+          grid.won = true;
+          grid.listenKeyboard = false;
+          // Open Here You Won Modal
+        } else {
+          grid.lost = true;
+          grid.listenKeyboard = false;
+          // Open Here You Lost Modal
         }
       }
+      
+      return grid;
+    } catch(err) {
+      console.log("Une erreur est survenue lieu lors du chargement de la dernière session du jour.")
+      return grid;
     }
-    if(userHistory.won == true) {
-      grid.won = true;
-      grid.listenKeyboard = false;
-      // Open Here You Won Modal
-    } else {
-      grid.lost = true;
-      grid.listenKeyboard = false;
-      // Open Here You Lost Modal
-    }
-     
-    return grid;
   }
   
   
