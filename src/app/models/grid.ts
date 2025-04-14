@@ -25,11 +25,13 @@ export class Grid {
   lockGivenLetters!: boolean; // If the user can type a different letter on top of a given letter or not
   giveLetterIndices!: number[];
 
+  invalidWordMessage!: boolean;
+  wordNotCompleteMessage!: boolean;
+
 
   constructor(wordToGuess: string, giveLetter: boolean, giveLetterIndices: number[], lockGivenLetters: boolean) {
     this.wordToGuess = wordToGuess;    
     this.wordToGuessLength = this.wordToGuess.length;
-    console.log(this.wordToGuessLength);
     this.numberOfChances = 6;
     this.guesses = [];
     this.activeRow = 0;
@@ -40,10 +42,8 @@ export class Grid {
     this.giveLetter = giveLetter;
     this.lockGivenLetters = lockGivenLetters;
     this.giveLetterIndices = giveLetterIndices;
-
-    if(giveLetterIndices.includes(0)) {
-      //this.activeColumn = 1;
-    }
+    this.invalidWordMessage = false;
+    this.wordNotCompleteMessage = false;
 
     this.gridRows = [];
     for(let i=0; i < this.numberOfChances; i++) {
@@ -78,6 +78,11 @@ export class Grid {
     this.activeRow++;
   }
 
+  setActiveRow(index: number): void {
+    this.gridRows[index].active = true;
+    this.activeRow = index;
+  }
+
   incrementActiveColumn(): void {
     this.activeColumn++;
   }
@@ -92,6 +97,22 @@ export class Grid {
 
   setNumberOfChances(number: number): void {
     this.numberOfChances = number;
+  }
+
+  showInvalidWordMessage(): void {
+    this.invalidWordMessage = true;
+  }
+
+  hideInvalidWordMessage(): void {
+    this.invalidWordMessage = false;
+  }
+
+  showWordNotCompleteMessage(): void {
+    this.wordNotCompleteMessage = true;
+  }
+
+  hideWordNotCompleteMessage(): void {
+    this.wordNotCompleteMessage = false;
   }
 
 }

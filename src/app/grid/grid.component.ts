@@ -1,5 +1,7 @@
 import { Component, HostListener, ChangeDetectorRef   } from '@angular/core';
 
+import { NgClass } from '@angular/common';
+
 import { GridRowComponent } from '../grid-row/grid-row.component';
 
 import { Grid } from '../models/grid';
@@ -8,7 +10,7 @@ import { GridService } from '../services/grid.service';
 
 @Component({
   selector: 'app-grid',
-  imports: [ GridRowComponent ],
+  imports: [ GridRowComponent, NgClass ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
@@ -23,8 +25,6 @@ export class GridComponent {
   ngOnInit() {
     this.grid = this.gridService.grid;
     this.cdRef.detectChanges();
-    console.log("Today's word length: ", this.grid.wordToGuessLength);
-    console.log("Today's word : ", this.grid.wordToGuess);
   }
 
   // keyboard listener (keyup = when key is released)

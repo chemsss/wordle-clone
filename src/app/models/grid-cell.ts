@@ -13,12 +13,20 @@ export class GridCell {
     this.example = false;
   }
 
-  setDisplayedLetter(letter: string): void {
-    if(letter == ".") {
-      this.filled = false;
+  setDisplayedLetter(letter: string, dontFill?: boolean): void {
+    if(dontFill) {
+      this.displayedLetter = letter;
     } else {
-      this.filled = true;
+      if(letter == ".") {
+        this.filled = false;
+      } else {
+        this.filled = true;
+      }
+      this.displayedLetter = letter;
     }
+  }
+
+  giveLetter(letter: string): void {
     this.displayedLetter = letter;
   }
 

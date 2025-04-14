@@ -53,6 +53,7 @@ export class GridService {
 
 
   typeLetter(grid: Grid, key: string): Grid {
+    // Not removing comments here for now because I'm scared something could break at some specific situation because I am now handling only the letter that we want to change for displayWord
     let displayWordCopy = grid.gridRows[grid.activeRow].displayWord;
 
     // only typing in uppercase
@@ -61,44 +62,54 @@ export class GridService {
     if(grid.activeColumn < grid.wordToGuessLength) {
 
       if(grid.lockGivenLetters == false || ( grid.giveLetter == true && !grid.giveLetterIndices.includes(grid.activeColumn) ))  {
-        displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key);
+        //displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key);
+        grid.gridRows[this.grid.activeRow].setDisplayWord(this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key), true);
+        grid.gridRows[this.grid.activeRow].rowCells[grid.activeColumn].setDisplayedLetter(key);
         grid.incrementActiveColumn();
       } else {
         if(this.utilsService.findNextNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices) != -1) {
           grid.setActiveColumn(this.utilsService.findNextNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices));
-          displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key);
+          //displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key);
+          grid.gridRows[this.grid.activeRow].setDisplayWord(this.utilsService.replaceAt(displayWordCopy, grid.activeColumn, key), true);
+          grid.gridRows[this.grid.activeRow].rowCells[grid.activeColumn].setDisplayedLetter(key);
           grid.incrementActiveColumn();
         }
       }
     }
-
     // Refresh word to display on active row
-    grid.gridRows[this.grid.activeRow].setDisplayWord(displayWordCopy);
+    //grid.gridRows[this.grid.activeRow].setDisplayWord(displayWordCopy);
+    //grid.gridRows[this.grid.activeRow].rowCells[grid.activeColumn-1].setDisplayedLetter(key);
+    //grid.gridRows[this.grid.activeRow].displayWord = displayWordCopy;
 
     return grid;
   }
   
 
   deleteLetter(grid: Grid): Grid {
+    // Not removing comments here for now because I'm scared something could break at some specific situation because I am now handling only the letter that we want to change for displayWord
     let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
 
-    if(grid.activeColumn >= 0) {
+    if(grid.activeColumn > 0) {
       if(grid.lockGivenLetters == false || ( grid.giveLetter == true && !grid.giveLetterIndices.includes(grid.activeColumn-1) )) {
-        displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, ".");
+        //displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, ".");
+        grid.gridRows[this.grid.activeRow].setDisplayWord(this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, "."), true);
+        grid.gridRows[this.grid.activeRow].rowCells[grid.activeColumn-1].setDisplayedLetter(".");
         if(grid.activeColumn > 0) {
           grid.decrementActiveColumn();
         }
       } else {
         if(this.utilsService.findPreviousNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices) != -1) {
           grid.setActiveColumn(this.utilsService.findPreviousNonLockedLetter(grid.activeColumn, displayWordCopy.length, grid.giveLetterIndices) + 1);
-          displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, ".");
+          //displayWordCopy = this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, ".");
+          grid.gridRows[this.grid.activeRow].setDisplayWord(this.utilsService.replaceAt(displayWordCopy, grid.activeColumn-1, "."), true);
+          grid.gridRows[this.grid.activeRow].rowCells[grid.activeColumn-1].setDisplayedLetter(".");
           if(grid.activeColumn > 0) {
             grid.decrementActiveColumn();
           }
         }
       }
     }
-    grid.gridRows[this.grid.activeRow].setDisplayWord(displayWordCopy);
+    //grid.gridRows[this.grid.activeRow].setDisplayWord(displayWordCopy);
 
     return grid;
   }
@@ -114,8 +125,15 @@ export class GridService {
       if(displayWordCopy == this.grid.wordToGuess) {
         grid = this.goodGuess(grid);
       } else {
-        grid = this.wrongGuess(grid);
-        //alert("Mauvais mot loser");
+        if(this.utilsService.wordIsInDb(displayWordCopy)) {
+          grid = this.wrongGuess(grid);
+        } else {
+          grid.showInvalidWordMessage();
+          // Hide the message after the animation
+          setTimeout(() => {
+            grid.hideInvalidWordMessage();
+          }, 2000); // match the fade-out duration
+        }
       }
     }
     return grid;
@@ -151,7 +169,7 @@ export class GridService {
       if(wordToGuessCopy.includes(letter)) {
         // If the letter is present at the same position in the word to guess
         if(wordToGuessCopy.charAt(i) == guessCopy.charAt(i)) {          
-          // Set cell of the letter to correct (for the css)
+          // Set cell of the letter to correct (for the css), if letter not already correct (for a given letter for example)
           gridRowCopy.setCellStatus(i, "correct");
           correctLetterPositionIndexes.push(i);
         }
@@ -201,6 +219,7 @@ export class GridService {
       // Increment active row and set the row to used
       grid.incrementActiveRow();
       grid.setActiveColumn(0);
+      this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, false);
     } else {
       grid = this.lostGame(grid);
     }
@@ -212,7 +231,7 @@ export class GridService {
     grid.listenKeyboard = false;
     // Open Here You Won Modal
     alert("Félicitations ! Vous avez trouvé le mot du jour !\n\nRevenez demain pour le prochain mot !");
-    this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, true);
+    this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, true, true);
     return grid;
   }
 
@@ -221,7 +240,7 @@ export class GridService {
     grid.listenKeyboard = false;
     // Open Here You Lost Modal
     alert("Vous avez perdu ! Le mot était : " +grid.wordToGuess +".\n\nBien essayé, retentez demain !");
-    this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, false);
+    this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, true, false);
     return grid;
   }
   

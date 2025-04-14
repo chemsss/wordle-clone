@@ -41,10 +41,14 @@ export class GridRow {
     }
   }
 
-  setDisplayWord(word: string): void {
+  setDisplayWord(word: string, dontFill?: boolean): void {
     this.displayWord = word;
     for(let i = 0; i< this.rowCells.length; i++) {
-      this.rowCells[i].setDisplayedLetter(word.charAt(i));
+      if(dontFill) {
+        this.rowCells[i].setDisplayedLetter(word.charAt(i), dontFill);
+      } else {
+        this.rowCells[i].setDisplayedLetter(word.charAt(i));
+      }
     }
   }
 
@@ -52,7 +56,8 @@ export class GridRow {
     // Replace the letter in displayWord by index
     let word = this.displayWord.substring(0, index) +letter + this.displayWord.substring(index + 1);
     // set displayWord and the rowCells and set the status of the cell of the correct letter to "correct"
-    this.setDisplayWord(word);
+    this.displayWord = word;
+    this.rowCells[index].giveLetter(letter);
     this.setCellStatus(index, "correct");
     return this;
   }

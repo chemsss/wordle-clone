@@ -7,17 +7,22 @@ import { GridRow } from '../models/grid-row';
 
 const acceptedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+
 @Injectable({
   providedIn: 'root'
 })
 
 export class UtilsService {
   private platformId!: Object;
+
+  private wordSet!: Set<string>;  // Used for checking the word the user typed, to reduce complexity of checking in the word database
   
   constructor(
     @Inject(PLATFORM_ID) platformId: Object,
   ) {
     this.platformId = platformId;
+
+    this.wordSet = new Set(wordsDb.map(entry => this.makeUpperCaseAndRemoveAccents(entry.word)));
   }
 
 
@@ -25,9 +30,13 @@ export class UtilsService {
     let wordToGuess = this.getAWordDependingOnDay(new Date());
     
     // Remove french accents from word and make it uppercase
-    wordToGuess = wordToGuess.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
+    wordToGuess = this.makeUpperCaseAndRemoveAccents(wordToGuess);
 
     return wordToGuess;
+  }
+
+  makeUpperCaseAndRemoveAccents(str: string): string {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toUpperCase();
   }
 
   /* notes mots par jour
@@ -55,13 +64,20 @@ export class UtilsService {
     const index = Math.floor(((hash >>> 0) / 2**32) * wordsDb.length);
     //const endTime = performance.now()
     // testing performance
-    //console.log(`Call to compute index took ${endTime - startTime} milliseconds`)
 
     if(index >= wordsDb.length || index < 0) {
       console.log("INDEX PROBLEM");
       return wordsDb[0].word
     } else {
       return wordsDb[index].word;
+    }
+  }
+
+  wordIsInDb(word: string): boolean {
+    if(this.wordSet.has(word)/*wordsDb.find( (element) => this.makeUpperCaseAndRemoveAccents(element.word) == word )*/) {
+      return true;
+    } else {
+      return false;
     }
   }
 
@@ -119,12 +135,13 @@ export class UtilsService {
 
 
   // Only called when game is finished (user found the word (won) or max number of tries reached (lost))
-  saveGame(wordToGuess: string, rows: GridRow[], won: boolean): void {
+  saveGame(wordToGuess: string, rows: GridRow[], ended:boolean, won?: boolean): void {
     let date = new Date();
     const day = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
 
     let save = {
-      won: won,
+      ended: ended ? true : false,
+      won: won ? true : false,
       rows: [ [ { } ] ],
       word: wordToGuess
     }
@@ -169,6 +186,7 @@ export class UtilsService {
       userHistory = userHistory[day];
       // If the word in the history is the same as today's word (useful when I change some code and today's word changes)
       if(userHistory.word == grid.wordToGuess) {
+        let lastActiveIndex = 0;
         for(let i=0 ; i < userHistory.rows.length ; i++) {
           if(grid.gridRows[i]) {
             let rowWord = "";
@@ -177,20 +195,24 @@ export class UtilsService {
               rowWord += userHistory.rows[i][j].letter;
     
             }
-            grid.gridRows[i].setDisplayWord(rowWord);
+            grid.gridRows[i].setDisplayWord(rowWord, true);
             if(!rowWord.includes(".")) {
               grid.gridRows[i].active = true;
+              lastActiveIndex++;
             }
           }
         }
-        if(userHistory.won == true) {
-          grid.won = true;
+        if(userHistory.ended) {
           grid.listenKeyboard = false;
-          // Open Here You Won Modal
+          if(userHistory.won == true) {
+            grid.won = true;
+            // Open Here You Won Modal
+          } else {
+            grid.lost = true;
+            // Open Here You Lost Modal
+          }
         } else {
-          grid.lost = true;
-          grid.listenKeyboard = false;
-          // Open Here You Lost Modal
+          grid.setActiveRow(lastActiveIndex);
         }
       }
       
