@@ -1,18 +1,21 @@
   <div class="header">
-  <button class="close" mat-button (click)="close()">X</button>
+    <button class="close" (click)="close()">&times;</button>
   </div>
   <div class="title content"><h1>Comment jouer</h1></div>
-  <div class="content">Le but est deviner le mot du jour en un nombre limité de tentatives. Chaque ligne correspond à une tentative.</div>
-  <div class="content">Il faut écrire un mot à l'aide du clavier et saisir sa tentative avec la touche Entrée.</div>
-  <div class="content">
-    <app-grid-cell [gridCell]="correctCell" [activeRow]="true" />Une lettre de cette couleur est à la bonne position.
+  <div class="main">
+    <div class="content">Le but est deviner le mot du jour en un nombre limité de tentatives. Chaque ligne correspond à une tentative.</div>
+    <div class="content">Il faut écrire un mot à l'aide du clavier et saisir sa tentative avec la touche Entrée.</div>
+    <div class="content">
+      <app-grid-cell [gridCell]="correctCell" [activeRow]="true" />Une lettre de cette couleur est à la bonne position.
+    </div>
+    <div class="content">
+      <app-grid-cell [gridCell]="wrongPosCell" [activeRow]="true" />Une lettre de cette couleur est présente dans le mot mais n'est pas à la bonne position.
+    </div>
+    <div class="content">
+      <app-grid-cell [gridCell]="notPresentCell" [activeRow]="true" />Une lettre de cette couleur n'est pas présente dans le mot.
+    </div>
+    <div class="content">La première lettre du mot, les apostrophes et les traits d'union, s'il y en a, sont toujours fournis.</div>
   </div>
-  <div class="content">
-    <app-grid-cell [gridCell]="wrongPosCell" [activeRow]="true" />Une lettre de cette couleur est présente dans le mot mais n'est pas à la bonne position.
-  </div>
-  <div class="content">
-    <app-grid-cell [gridCell]="notPresentCell" [activeRow]="true" />Une lettre de cette couleur n'est pas présente dans le mot.
-  </div>
-  <div class="content">La première lettre du mot, les apostrophes et les traits d'union, s'il y en a, sont toujours fournis.</div>
+
 
 

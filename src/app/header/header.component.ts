@@ -5,7 +5,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 import { DayCountdownComponent } from '../day-countdown/day-countdown.component';
 
-import { HelpModalComponent } from '../help-modal/help-modal.component'; // adjust path as needed
+import { HelpModalComponent } from '../help-modal/help-modal.component';
 
 @Component({
   selector: 'app-header',
@@ -16,7 +16,8 @@ import { HelpModalComponent } from '../help-modal/help-modal.component'; // adju
 export class HeaderComponent {
   constructor(private dialog: MatDialog) {}
 
-  openModal() {
+  openModal(event: Event) {
+    (event.target as HTMLElement).blur();
     this.dialog.open(HelpModalComponent, {
       width: '1000px',
       panelClass: 'help-dialog-container'

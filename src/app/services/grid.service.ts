@@ -4,6 +4,10 @@ import { Grid } from '../models/grid';
 
 import { UtilsService } from './utils.service';
 
+import { LostModalComponent } from '../lost-modal/lost-modal.component';
+import { WonModalComponent } from '../won-modal/won-modal.component';
+import { MatDialog } from '@angular/material/dialog';
+
 const acceptedLetters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ-'";
 
 @Injectable({
@@ -16,22 +20,35 @@ export class GridService {
 
   //constructor() { };
 
-  constructor(private utilsService: UtilsService) {
+  constructor(private utilsService: UtilsService,
+              private dialog: MatDialog) {
     try {
       const wordOfTheDay = utilsService.getWordOfTheDay();
       //console.log(wordOfTheDay);
       let giveLetters = utilsService.getApostrophesAndHyphensIndices(wordOfTheDay);
       giveLetters.push(0);
       this.grid = new Grid(wordOfTheDay, true, giveLetters, true);
-      if(this.utilsService.checkIfGameSaved(new Date())) {
-        this.grid = this.utilsService.loadTodaysGame(this.grid);
-      }
+      this.grid = this.checkGameSave(this.grid);
     } catch(err) {
       console.log(err);
       alert("Une erreur est survenue.");
     }
     
   }
+
+
+  checkGameSave(grid: Grid): Grid {
+    if(this.utilsService.checkIfGameSaved(new Date())) {
+      grid = this.utilsService.loadTodaysGame(grid);
+      if(this.grid.lost == true) {
+        grid = this.lostGame(grid);
+      } else if(this.grid.won == true) {
+        grid = this.wonGame(grid);
+      }
+    }
+    return grid;
+  }
+
 
   handleKey(grid: Grid, key:string): Grid {
 
@@ -230,7 +247,11 @@ export class GridService {
     grid.won = true;
     grid.listenKeyboard = false;
     // Open Here You Won Modal
-    alert("Félicitations ! Vous avez trouvé le mot du jour !\n\nRevenez demain pour le prochain mot !");
+    this.dialog.open(WonModalComponent, {
+      width: '1000px',
+      data: { wordToGuess: this.grid.wordToGuess },
+    });
+    //alert("Félicitations ! Vous avez trouvé le mot du jour !\n\nRevenez demain pour le prochain mot !");
     this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, true, true);
     return grid;
   }
@@ -239,7 +260,11 @@ export class GridService {
     grid.lost = true;
     grid.listenKeyboard = false;
     // Open Here You Lost Modal
-    alert("Vous avez perdu ! Le mot était : " +grid.wordToGuess +".\n\nBien essayé, retentez demain !");
+    this.dialog.open(LostModalComponent, {
+      width: '1000px',
+      data: { wordToGuess: this.grid.wordToGuess },
+    });
+    //alert("Vous avez perdu ! Le mot était : " +grid.wordToGuess +".\n\nBien essayé, retentez demain !");
     this.utilsService.saveGame(grid.wordToGuess, grid.gridRows, true, false);
     return grid;
   }
