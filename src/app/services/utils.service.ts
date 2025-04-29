@@ -27,6 +27,7 @@ export class UtilsService {
 
 
   getWordOfTheDay(): string {
+    // Add day of sessionStorage here
     let wordToGuess = this.getAWordDependingOnDay(new Date());
     
     // Remove french accents from word and make it uppercase
@@ -44,6 +45,9 @@ export class UtilsService {
   19/03 : munificences
   21/03 : moignon
   */
+
+
+  // Add a formatDay() function
 
 
   getAWordDependingOnDay(date: Date): string {

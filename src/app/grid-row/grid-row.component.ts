@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, ChangeDetectorRef } from '@angular/core';
 
 import { GridRow } from '../models/grid-row';
 
@@ -18,8 +18,14 @@ export class GridRowComponent {
 
   //nonActiveGridRow!: GridRow; // We use this for non used/non active rows
 
+  loading: boolean = true;
+
+  constructor(private cdRef: ChangeDetectorRef) { };
+
   ngOnInit() {
     //this.nonActiveGridRow = new GridRow(this.numberOfColumns);
+    this.cdRef.detectChanges();
+    this.loading = false;
   }
 
 }

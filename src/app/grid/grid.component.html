@@ -1,5 +1,5 @@
 <div class="grid">
-  @if(loading == false) {
+  @if(loading == false && getServiceLoading() == false) {
     @for (gridRow of grid.gridRows; track $index) {
       <app-grid-row [active]="gridRow.active" [gridRow]="gridRow" [numberOfColumns]="this.grid.wordToGuessLength" />
     }

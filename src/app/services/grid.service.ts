@@ -18,6 +18,8 @@ export class GridService {
   
   grid!: Grid;
 
+  loading: boolean = true;
+
   //constructor() { };
 
   constructor(private utilsService: UtilsService,
@@ -29,8 +31,10 @@ export class GridService {
       giveLetters.push(0);
       this.grid = new Grid(wordOfTheDay, true, giveLetters, true);
       this.grid = this.checkGameSave(this.grid);
+      this.loading = false;
     } catch(err) {
       console.log(err);
+      this.loading = false;
       alert("Une erreur est survenue.");
     }
     

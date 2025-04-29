@@ -39,5 +39,9 @@ export class GridComponent {
     }
   }
 
+  getServiceLoading(): boolean {
+    return this.gridService.loading;
+  }
+
 
 }
