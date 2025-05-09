@@ -1,0 +1,17 @@
+<div class="keyboard">
+  <div class="keyboard-row one">
+    @for (key of getRow1(); track $index) {
+      <app-keyboard-key [key]="key" />
+    }
+  </div>
+  <div class="keyboard-row two">
+    @for (key of getRow2(); track $index) {
+      <app-keyboard-key [key]="key" />
+    }
+  </div>
+  <div class="keyboard-row three">
+    @for (key of getRow3(); track $index) {
+      <app-keyboard-key [key]="key" />
+    }
+  </div>
+</div>

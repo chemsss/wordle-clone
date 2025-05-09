@@ -3,4 +3,8 @@
   gap: 5px; 
   justify-content: center; 
   flex-wrap: wrap;
+
+  @media(max-width: 600px) {
+    gap: 3px;
+  }
 }

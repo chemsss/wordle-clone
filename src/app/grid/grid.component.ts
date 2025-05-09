@@ -4,13 +4,15 @@ import { NgClass } from '@angular/common';
 
 import { GridRowComponent } from '../grid-row/grid-row.component';
 
+import { KeyboardComponent } from '../keyboard/keyboard.component';
+
 import { Grid } from '../models/grid';
 
 import { GridService } from '../services/grid.service';
 
 @Component({
   selector: 'app-grid',
-  imports: [ GridRowComponent, NgClass ],
+  imports: [ NgClass, GridRowComponent, KeyboardComponent ],
   templateUrl: './grid.component.html',
   styleUrl: './grid.component.scss'
 })
@@ -21,10 +23,8 @@ export class GridComponent {
     ) { };
   
   loading: boolean = true;
-  grid!: Grid;
 
   ngOnInit() {
-    this.grid = this.gridService.grid;
     this.cdRef.detectChanges();
     this.loading = false;
   }
@@ -32,16 +32,18 @@ export class GridComponent {
   // keyboard listener (keyup = when key is released)
   @HostListener('document:keyup', ['$event'])
   onKeyup(event: KeyboardEvent) {
-    //console.log(this.grid)
-    if(this.grid.won == false && this.grid.lost == false) {
+    if(this.getGrid().won == false && this.getGrid().lost == false) {
       //console.log(event);
-      this.grid = this.gridService.handleKey(this.grid, event.key);
+      this.gridService.handleKey(event.key);
     }
+  }
+
+  getGrid(): Grid {
+    return this.gridService.grid;
   }
 
   getServiceLoading(): boolean {
     return this.gridService.loading;
   }
-
 
 }

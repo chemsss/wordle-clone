@@ -54,22 +54,21 @@ export class GridService {
   }
 
 
-  handleKey(grid: Grid, key:string): Grid {
+  handleKey(key:string): void {
 
     // If the key is a letter
     if(acceptedLetters.includes(key)) {
-      this.grid = this.typeLetter(grid, key);
+      this.grid = this.typeLetter(this.grid, key);
 
       // If the key is Backspace (to delete last typed letter)
     } else if(key == "Backspace") {
-      this.grid = this.deleteLetter(grid);
+      this.grid = this.deleteLetter(this.grid);
 
       // If the key is Enter (to make a guess)
     } else if(key == "Enter") {
-      this.grid = this.makeAGuess(grid);
+      this.grid = this.makeAGuess(this.grid);
     }    
 
-    return this.grid;
   }
 
 
@@ -141,7 +140,11 @@ export class GridService {
     let displayWordCopy = grid.gridRows[this.grid.activeRow].displayWord;
 
     if(displayWordCopy.includes(".")) {
-      //alert("Le mot est incomplet !");
+      grid.showInvalidWordMessage("Le mot est incomplet !");
+      // Hide the message after the animation
+      setTimeout(() => {
+        grid.hideInvalidWordMessage();
+      }, 2000); // match the fade-out duration
     } else {
       if(displayWordCopy == this.grid.wordToGuess) {
         grid = this.goodGuess(grid);
@@ -149,7 +152,7 @@ export class GridService {
         if(this.utilsService.wordIsInDb(displayWordCopy)) {
           grid = this.wrongGuess(grid);
         } else {
-          grid.showInvalidWordMessage();
+          grid.showInvalidWordMessage("Ce mot n'est pas dans la liste !");
           // Hide the message after the animation
           setTimeout(() => {
             grid.hideInvalidWordMessage();
@@ -223,6 +226,9 @@ export class GridService {
           wordToGuessCopy = wordToGuessCopy = wordToGuessCopy.replace(letter, " ");
         } else  {
           gridRowCopy.setCellStatus(i, "not-present");
+          if(!grid.notPresentLetters.includes(letter)) {
+            grid.notPresentLetters.push(letter);
+          }
         }
       }
     }

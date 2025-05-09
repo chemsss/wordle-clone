@@ -48,7 +48,27 @@ export class UtilsService {
 
 
   // Add a formatDay() function
+  formatDay(date: Date): string {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+  }
 
+  setSessionDate(): void {
+    if(isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem('sessionDate', this.formatDay(new Date()));
+    }
+  }
+
+  isDateDifferentThanSessionDate(date: Date): boolean {
+    if(isPlatformBrowser(this.platformId)) {
+      if(this.formatDay(date) == sessionStorage.getItem('sessionDate')) {
+        return false;
+     } else {
+       return true;
+     }
+    } else {
+      return false;
+    }
+  }
 
   getAWordDependingOnDay(date: Date): string {
     // Get today's date as YYYY-MM-DD string
@@ -78,7 +98,7 @@ export class UtilsService {
   }
 
   wordIsInDb(word: string): boolean {
-    if(this.wordSet.has(word)/*wordsDb.find( (element) => this.makeUpperCaseAndRemoveAccents(element.word) == word )*/) {
+    if(this.wordSet.has(word)) {
       return true;
     } else {
       return false;
@@ -197,7 +217,11 @@ export class UtilsService {
             for(let j=0 ; j < userHistory.rows[i].length ; j++) {
               grid.gridRows[i].setCellStatus(j, userHistory.rows[i][j].status);
               rowWord += userHistory.rows[i][j].letter;
-    
+              if(userHistory.rows[i][j].status == "not-present") {
+                if(!grid.notPresentLetters.includes(userHistory.rows[i][j].letter)) {
+                  grid.notPresentLetters.push(userHistory.rows[i][j].letter);
+                }
+              }
             }
             grid.gridRows[i].setDisplayWord(rowWord, true);
             if(!rowWord.includes(".")) {
