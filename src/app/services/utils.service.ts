@@ -234,10 +234,8 @@ export class UtilsService {
           grid.listenKeyboard = false;
           if(userHistory.won == true) {
             grid.won = true;
-            // Open Here You Won Modal
           } else {
             grid.lost = true;
-            // Open Here You Lost Modal
           }
         } else {
           grid.setActiveRow(lastActiveIndex);

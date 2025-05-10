@@ -27,7 +27,10 @@ export class KeyboardKeyComponent {
 
   handleKeyPress(event: Event): void {
     (event.target as HTMLElement).blur();
-    this.gridService.handleKey(this.key);
+    if(this.gridService.grid.won == false && this.gridService.grid.lost == false) {
+      this.gridService.handleKey(this.key);
+    }
+    
   }
 
 }
