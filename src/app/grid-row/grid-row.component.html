@@ -1,5 +1,5 @@
 <div class="grid-row">
-  @if(loading == false) {
+  @if(loading == false && getServiceLoading() == false && getGrid()) {
     @for (gridCell of gridRow.rowCells; track $index) {
       <app-grid-cell [gridCell]="gridCell" [activeRow]="active" />
     }

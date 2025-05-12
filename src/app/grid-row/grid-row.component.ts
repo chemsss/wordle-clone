@@ -4,6 +4,10 @@ import { GridRow } from '../models/grid-row';
 
 import { GridCellComponent } from '../grid-cell/grid-cell.component';
 
+import { Grid } from '../models/grid';
+
+import { GridService } from '../services/grid.service';
+
 @Component({
   selector: 'app-grid-row',
   imports: [ GridCellComponent ],
@@ -20,12 +24,22 @@ export class GridRowComponent {
 
   loading: boolean = true;
 
-  constructor(private cdRef: ChangeDetectorRef) { };
+  constructor(private gridService: GridService,
+    private cdRef: ChangeDetectorRef
+) { };
 
   ngOnInit() {
     //this.nonActiveGridRow = new GridRow(this.numberOfColumns);
     this.cdRef.detectChanges();
     this.loading = false;
+  }
+
+  getGrid(): Grid {
+    return this.gridService.grid;
+  }
+
+  getServiceLoading(): boolean {
+    return this.gridService.loading;
   }
 
 }
