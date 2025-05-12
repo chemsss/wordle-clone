@@ -2,8 +2,7 @@
 
 To get familiar with the Angular framework, I built with **Angular 19** a French daily word game inspired by **Tusmo**, that I named **Mot du jour**.  
 Guess the word of the day using color-coded clues and logic, with a sleek interface and helpful features.  
-
-<br />
+  
 <br />
 
 ## 🎮 Features  
@@ -33,8 +32,7 @@ Guess the word of the day using color-coded clues and logic, with a sleek interf
 - 💾 **Persistence**
   - User progress is **saved in local storage** after each guess.
   - Game state is restored when the user returns.
-
-<br />
+  
 <br />
 
 ## 🔮 Planned Features
@@ -43,8 +41,7 @@ Guess the word of the day using color-coded clues and logic, with a sleek interf
 - 🧪 **Sandbox Mode**: Change rules like word length, reveal rules, etc. (thanks to a rule-configurable codebase).
 - 📈 **History View**: Track your past performance and stats.
 - 📖 **Word Definitions**: Integrate a dictionary API to show the word's definition after the game.
-
-<br />
+  
 <br />
 
 ## 🛠️ Tech Stack
@@ -53,8 +50,7 @@ Guess the word of the day using color-coded clues and logic, with a sleek interf
 - **Language**: TypeScript
 - **Styling**: SCSS
 - **Storage**: Browser local storage
-
-<br />
+  
 <br />
 
 ## 🚀 Getting Started
@@ -81,7 +77,6 @@ Guess the word of the day using color-coded clues and logic, with a sleek interf
 - The app will be available at http://localhost:4200 in your browser.
   
 <br />
-<br />
 
 ## 📂 Folder Structure Highlights
 
@@ -90,13 +85,11 @@ Guess the word of the day using color-coded clues and logic, with a sleek interf
   
   
 <br />
-<br />
 
 ## 📄 License
 This project is open source under the MIT License.
   
   
-<br />
 <br />
 
 ## 🙌 Acknowledgments
