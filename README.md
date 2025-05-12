@@ -1,59 +1,93 @@
-# WordleClone
+# 🇫🇷 Mot du jour (Angular 19)
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.1.5.
+To get familiar with the Angular framework, I built a French daily word game inspired by **Tusmo**, with **Angular 19**. Guess the word of the day using color-coded clues and logic, with a sleek interface and helpful features.
 
-## Development server
+---
 
-To start a local development server, run:
+## 🎮 Features
 
-```bash
-ng serve
-```
+- 🟩 **Tusmo-style gameplay**
+  - Same **color code** as Tusmo to guide your guesses.
+  - The **first letter** is always revealed.
+  - All **apostrophes** and **hyphens** in the word are shown from the start.
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+- 📚 **Word bank**
+  - Pulled from [lexique.org](https://www.lexique.org), preprocessed and available in the `db/` folder.
+  - Some words have been removed for quality and relevance.
 
-## Code scaffolding
+- 📅 **Daily gameplay**
+  - A new word is generated **each day**.
+  - Word resets at **midnight**, based on the **user's local time**.
+  - A **live countdown** in the header shows when the next word will appear.
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
+- ⌨️ **User interface**
+  - Includes a **virtual keyboard**.
+  - Keys for letters not in the word are **grayed out** as feedback.
+  
+- ❓ **Modals and help**
+  - A **help modal** explains the rules.
+  - Modals also appear when the user **wins or loses**.
 
-```bash
-ng generate component component-name
-```
+- 💾 **Persistence**
+  - User progress is **saved in local storage** after each guess.
+  - Game state is restored when the user returns.
 
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+---
 
-```bash
-ng generate --help
-```
+## 🔮 Planned Features
 
-## Building
+- 🌀 **Unlimited Mode**: Play as many games as you want without waiting for the next day.
+- 🧪 **Sandbox Mode**: Change rules like word length, reveal rules, etc. (thanks to a rule-configurable codebase).
+- 📈 **History View**: Track your past performance and stats.
+- 📖 **Word Definitions**: Integrate a dictionary API to show the word's definition after the game.
 
-To build the project run:
+---
 
-```bash
-ng build
-```
+## 🛠️ Tech Stack
 
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
+- **Framework**: Angular 19 (Node.js v20.11.1)
+- **Language**: TypeScript
+- **Styling**: SCSS
+- **Storage**: Browser local storage
 
-## Running unit tests
+---
 
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
+## 🚀 Getting Started
 
-```bash
-ng test
-```
+1. Clone the repo:
 
-## Running end-to-end tests
+   ```bash
+   git clone https://github.com/chemsss/tusmo-angular.git
+   cd tusmo-angular
+   ```
 
-For end-to-end (e2e) testing, run:
+2. Install dependencies (ensure you have Node.js v20.11.1 and Angular 19 installed):
 
-```bash
-ng e2e
-```
+   ```bash
+   npm install
+   ```
 
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
+3. Run the development server:
 
-## Additional Resources
+   ```bash
+   ng serve
+   ```
 
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- The app will be available at http://localhost:4200 in your browser.
+  
+---
+## 📂 Folder Structure Highlights
+
+- `src/` – Main Angular application.  
+- `db/` – Word list database sourced from [Lexique](https://www.lexique.org). See the README in `db/` for the changes in the database.
+  
+  
+---
+## 📄 License
+This project is open source under the MIT License.
+  
+  
+---
+## 🙌 Acknowledgments
+- Inspired by Tusmo, Wordle and similar word games.
+- Word list from [Lexique](https://www.lexique.org)
