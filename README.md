@@ -7,7 +7,7 @@ Guess the word of the day using color-coded clues and logic, with a sleek interf
 
 ## 🎮 Features  
 
-- 🟥 **Tusmo-style gameplay**
+- 🟥 **Gameplay**
   - Same **color code** as Tusmo to guide your guesses.
   - The **first letter** is always revealed.
   - All **apostrophes** and **hyphens** in the word are shown from the start.
